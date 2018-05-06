@@ -1,0 +1,97 @@
+<?php
+
+
+/**
+ * Implements hook_fboauth_actions().
+ */
+function wotdfbpost_fboauth_actions()
+{
+    $actions['post_to_wall'] = array(
+        'title' => 'Post to Wall',
+        'callback' => 'wotdfbpost_fboauth_action_post_to_wall',
+        'permissions' => array(
+            'publish_actions'
+        )
+    );
+    return $actions;
+}
+
+function wotdfbpost_fboauth_action_post_to_wall($app_id, $access_token) {
+
+    $thewotd = new EntityFieldQuery();
+    $thewotd-> entityCondition('entity_type','node')
+        ->entityCondition('bundle','word_of_the_day')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_pub_date','value','NULL','!=')
+        ->fieldCondition('field_pub_date','value',  date('Y-m-d H:i:s'), '<=')
+        ->fieldOrderBy('field_pub_date', 'value', 'DESC')
+        ->range('NULL',1);
+
+    $result = $thewotd->execute();
+
+    $wotdwrapper = entity_metadata_wrapper('node', node_load(array_keys($result['node'])[0]));
+
+    $message = "Word of the Day: \n" . $wotdwrapper->title->value() . " " . $wotdwrapper->field_part_of_speech->label()
+        . "\n" . strip_tags($wotdwrapper->body->value->value());
+    $link = 'http://cryptoscience.com/word-of-the-day';
+
+
+    $query = array(
+        'message' => $message,
+        'link' => $link,
+        'redirect' => '/word-of-the-day',
+        'app_id' => variable_get('fboauth_id', ''),
+    );
+    $response = fboauth_graph_query('me/feed', $access_token, $query, 'POST');
+
+    if (isset($response->id)) {
+    watchdog('wotdfbpost', 'Successfully pushed post to FB');
+        variable_set('lastwotdpost', date('Y-m-d'));
+    }
+    else {
+        watchdog('mymodule', 'Error executing fboauth action: @error', array('@error' => (isset($reponse->error) ? $response->error : t('Something went horribly wrong'))));
+    }
+}
+
+
+
+//function wotdfbpost_cron() {
+//     //  Extract the link from a given fboauth action.
+//        $fb_link = fboauth_action_link_properties('post_to_wall');
+//
+//        // Extract the request url from a given fboauth action link, including the query parameters.
+//        $fb_query_url = url($fb_link['href'], array('absolute' => TRUE, 'query' => $fb_link['query']));
+//
+//    $query = http_build_query( array(
+//        'client_id' => '219434331802314',
+//        'redirect_uri' => 'http://cryptoscience.com/fboauth/post_to_wall',
+//        'display' => 'popup',
+//        'scope' => 'publish_actions'
+//    ));
+//    $call = drupal_http_request($fb_query_url, array( 'data' => $query));
+//    watchdog('wotdfbpost', 'SCREAMING');
+//
+//
+//}
+
+
+//function wotdfbpost_preprocess_page(&$vars) {
+//    // Do we have a node?
+//        if (isset($vars['node'])) {
+//            //WOTD page vars
+//            if ($vars['node']->nid == 641) {
+//                // Extract the link from a given fboauth action.
+//                $fb_link = fboauth_action_link_properties('post_to_wall');
+//
+//                // Extract the request url from a given fboauth action link, including the query parameters.
+//                $vars['fb_query_url'] = url($fb_link['href'], array('absolute' => TRUE, 'query' => $fb_link['query']));
+//            }
+//    }
+//}
+
+//function wotdfbpost_rules_callback() {
+//    $q = fboauth_action_link_properties('post_to_wall');
+//    $authcall = curl_init("https://www.facebook.com/v2.5/dialog/oauth?client_id=".$q['query']['client_id']."&redirect_uri=".$q['query']['redirect_uri']);
+//    curl_exec($authcall);
+//    curl_close($authcall);
+//}

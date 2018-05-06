@@ -1,0 +1,29 @@
+<?php 
+
+/***  noun_list table already created by hand ***/
+
+function emoji_tarot_schema() {
+	$schema['emoji_tarot_users'] = array(
+		'description' => 'A list of names used for completely insecure identification of a past visitor',
+		'fields' => array(
+			'id' => array(
+				'description' => 'Key',
+				'type' => 'serial',
+				'not_null' => TRUE),
+			'name' => array(
+				'description' => 'name identifier',
+				'type' => 'varchar',
+				'length' => 128),
+			'deckJSON' => array(
+				'description' => 'JSONified deck array',
+				'type' => 'text',
+				'serialize' => TRUE,
+				'size' => 'normal'
+			)	
+		),
+		'primary key' => array('id')
+	);
+	return $schema;
+}
+
+/*** TODO   - uninstall function to remove table ****/

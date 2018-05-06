@@ -1,0 +1,589 @@
+@import 'bootstrap.less';
+@bordergreen: #008888;
+@bgwhite: #fafafa;
+@linkblue: #337ab7;
+@cardblue: #0055aa;
+
+@tabbackground: linear-gradient(to right, rgba(239,246,194,0.65) 0%,rgba(0,0,0,0.1) 100%);
+
+
+/** mobile */
+
+nav {
+	ul.menu.navbar-nav {
+		li {
+			a {
+				position: relative;
+				margin: 3px;
+				border-radius: 16px;
+				background-color: @bordergreen;
+				color: white;
+				box-shadow: 1px 0 2px #aaa;
+				padding-bottom: 8px;
+				padding-top: 7px;
+				line-height: 20px;
+				&:hover {
+					background-color: #77bfbf;
+				}
+
+				&.active-trail {
+					color: @bordergreen;
+					background-color: #f8f8f8;
+					font-weight: 700;
+					box-shadow: none;
+				}
+			}
+		}
+	}
+	
+}
+
+/* tablet */
+
+@media (min-width: @screen-sm-min ) and (max-width: @screen-sm-max) {
+	.titlebarfloattext {
+		position: absolute;
+		bottom: 50%;
+		transform: translateY(50%);
+		-webkit-transform: translateY(50%);
+		-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, SizingMethod='auto expand')";
+		right: 1em;
+		width: 50%;
+		font-size: 85%;
+	}
+
+	body.node-type-page , body.node-type.grid {
+		.navbar-default {
+			.navbar-collapse {
+				.menu.nav {
+					li {
+						a {
+							font-size: 18px;
+							padding-top: 7px;
+							padding-bottom: 6px;
+							color: @linkblue;
+							background-color: #fff;
+							z-index: 5;
+							border: 3px solid @bordergreen;
+							margin:auto;
+							&:hover {
+								background-color: #FBD97E;
+								color: @bordergreen;
+								box-shadow: none;
+							}
+
+							&.active-trail {
+								background-color: #eff6c2;
+							}
+						}
+					}
+				}
+
+				&.collapse {
+					.menu.nav {
+						li {
+							a {
+								font-size: 18px;
+								padding-top: 7px;
+								padding-bottom: 6px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/*desktop */
+@media (min-width: @screen-md-min) {
+	body.node-type-grid-page {
+		background-color: @bgwhite;
+		.page-header {
+			margin: 0 0;
+			border-bottom: 0;
+		}
+
+		.navbar-default {
+			background-color: #fff;
+			padding-top: 5px;
+			.navbar-collapse {
+				max-width: 80%;
+				float: left;
+				.menu.nav {
+					li {
+						float: left;
+						display: block;
+						position: relative;
+						a {
+							position: relative;
+							margin: 3px;
+							border-radius: 10px;
+							background-color: @bordergreen;
+							color: white;
+							box-shadow: 1px 0 2px #aaa;
+							padding-bottom: 15px;
+							padding-top: 15px;
+							line-height: 20px;
+							&:hover {
+								background-color: #77bfbf;
+							}
+
+							&.active-trail {
+								color: @bordergreen;
+								background-color: #f8f8f8;
+								font-weight: 700;
+								box-shadow: none;
+							}
+						}
+					}
+				}
+
+				.contextual-links-region #edit-spamicide {
+					display: none;
+				}
+			}
+		}
+
+		.small-corner-menu {
+			position: absolute;
+			top: 10%;
+			right: 5px;
+			ul {
+				list-style-type: none;
+				li {
+					&:first-child {
+						display: none;
+					}
+
+					margin: 8px 0;
+					a {
+						color: @linkblue;
+						background-color: #fff;
+						z-index: 5;
+						border: 2px solid @bordergreen;
+						border-radius: 4px;
+						padding: 3px;
+						&:hover {
+							background-color: #FBD97E;
+							color: @bordergreen;
+							box-shadow: none;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	body.node-type-page , body.node-type-tarot-page {
+		background-color: #fafafa;
+		.page-header {
+			margin: 0 0;
+			border-bottom: 0;
+		}
+
+		.navbar-default {
+			background-color: #fff;
+			padding-top: 5px;
+			.navbar-collapse {
+				max-width: 80%;
+				float: left;
+				overflow: hidden;
+				.menu.nav {
+					li {
+						float: left;
+						display: block;
+						position: relative;
+						a {
+							position: relative;
+							top: 50%;
+							font-size: 32px;
+							color: @linkblue;
+							background: @tabbackground;
+							z-index: 5;
+							border: 4px solid @bordergreen;
+							border-radius: 8px;
+							padding: 12px 6px;
+							box-shadow: 1px 2px 2px #999;
+							animation-name: menudrop;
+							animation-duration: 1.3s;
+							animation-fill-mode: forwards;
+                          transition: all 700ms linear;
+                          &:hover {
+								background-color: #FBD97E;
+								color: @bordergreen;
+								box-shadow: none;
+							}
+
+							&.active-trail {
+								background-color: #eff6c2;
+                              background-image: none;
+                              &:hover {
+                                box-shadow: 1px 2px 2px #999;
+                              }
+							}
+
+							&::before {
+								content: "|";
+								font-size: 48px;
+								position: absolute;
+								top: -37px;
+								left: 50%;
+								z-index: 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@keyframes menudrop {
+		from {
+			transform: translateY(0)
+		}
+
+		to {
+			transform: translateY(55%)
+		}
+	}
+
+	.nav-tabs {
+		border-bottom-width: 0;
+	}
+
+	.navbar-collapse {
+		li {
+			display: table-cell;
+			vertical-align: middle;
+		}
+	}
+
+	.navbar-brand {
+		animation-name: logoanim;
+		animation-duration: 10s;
+		animation-fill-mode: forwards;
+		animation-timing-function: linear;
+		margin-top: 45px;
+	}
+
+	@keyframes logoanim {
+		from {
+			color: #fff
+		}
+
+		to   {
+			color: #333;
+		}
+	}
+
+	.frontpagewrapper {
+		width: 100%;
+		position: relative;
+		overflow: hidden;
+		background-image: url(/sites/default/files/helpus-videocollage.png);
+		background-repeat: none;
+		background-size: 100%;
+		&:after {
+			padding-top: 87%;
+			display: block;
+			content: '';
+		}
+	}
+
+	.overlay {
+		position: absolute;
+		visibility: hidden;
+	}
+
+	.hiddenlayer {
+		background-repeat: no-repeat;
+		border-radius: 50%;
+		position: absolute;
+		box-shadow: 0 0 18px #ababab;
+		&.ui-draggable {
+			cursor: move;
+			cursor: -webkit-grab;
+			cursor: -moz-grab;
+		}
+	}
+
+	.hiddenlayer1 {
+		background-image: url(/sites/default/files/satyricon-videocollage.png);
+	}
+
+	.hiddenlayer4 {
+		background-image: url(/sites/default/files/sinistar-videocollage.png);
+	}
+
+	.hiddenlayer3 {
+		background-image: url(/sites/default/files/graveyard-videocollage.png);
+	}
+
+	.hiddenlayer2 {
+		background-image: url(/sites/default/files/space-invaders-giphy.gif);
+		background-repeat: repeat;
+		background-size: 25px auto;
+	}
+
+	.hiddenlayer5 {
+		background-image: url(/sites/default/files/streetscene-videocollage.png);
+	}
+
+	.hiddenlayer6 {
+		background-image: url(/sites/default/files/airfield-videocollage.png);
+	}
+
+	.hiddenlayergrow {
+		animation-name: grow;
+		animation-duration: 30s;
+		animation-fill-mode: forwards;
+	}
+
+	@keyframes grow {
+		0% {
+			background-size: 25px;
+		}
+
+		100% {
+			background-size: 300px;
+		}
+	}
+
+	canvas#frontpagecanvas {
+		position: absolute;
+		top: auto;
+		bottom: auto;
+		right: 0;
+		left: 0;
+		width: 100%;
+		height: 86%;
+		background-image: url(/sites/default/files/helpus-videocollage.png);
+		background-repeat: no-repeat;
+		background-size: 100%;
+	}
+
+	.fa-spin-custom , .glyphicon-spin {
+		-webkit-animation: spin 1000ms infinite linear;
+		animation: spin 1000ms infinite linear;
+	}
+
+	@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(359deg);
+			transform: rotate(359deg);
+		}
+	}
+
+	@keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(359deg);
+			transform: rotate(359deg);
+		}
+	}
+
+	#tilethrobber {
+		position: relative;
+		background-color: transparent;
+		border: none;
+		box-shadow: none;
+		font-size: 24px;
+		color: #77bfbf;
+		padding: 36px;
+	}
+
+	.worddef {
+		&.main {
+			font-family: 'Trocchi', sans-serif;
+			padding: 3em 3em 3em 0;
+			.word {
+				font-size: 52px;
+			}
+
+			.part {
+				font-size: 32px;
+			}
+		}
+
+		&.heading {
+			margin-left: 1em;
+		}
+
+		&.past {
+			font-family: 'Trocchi', sans-serif;
+			margin-left: 1em;
+			.views-row {
+				padding: 1em 3em 1em 0;
+				&:hover {
+					opacity: 1;
+				}
+			}
+
+			.views-field-field-pub-date {
+				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				font-size: 13px;
+				float: left;
+				height: 75px;
+				padding: 3px 10px;
+				color: @linkblue;
+			}
+
+			.views-field-title {
+				padding-left: 1em;
+			}
+
+			.views-field-body {
+				padding-left: 1em;
+			}
+
+			.word {
+				font-size: 18px;
+			}
+
+			.part {
+				font-size: inherit;
+			}
+
+			ul.pagination {
+				li {
+					&.active {
+						span {
+							border-radius: 50%;
+							background-color: #666;
+						}
+					}
+
+					a {
+						border-width: 0;
+						background-color: transparent;
+						color: #666;
+					}
+				}
+			}
+		}
+	}
+
+	.well.wotd {
+		background: url(/sites/default/files/WOTD-image-2.jpg) no-repeat 100%;
+		max-width: 355px;
+		.well {
+			opacity: .9;
+		}
+	}
+
+	button.fbo-auth-popup {
+		height: 30px;
+		width: 200px;
+	}
+
+	.fadeloop (40);
+	.fadeloop (@o , @i: 1) when (@i < @o) {
+		.worddef.past .views-row-@{i} {
+			opacity: (1 - (@i * .02));
+			padding-left: 4px * @i;
+		}
+
+		.fadeloop (@o , (@i + 1));
+	}
+
+	.node-type-tarot-page {
+		.tarot-dialog {
+			font-size: 18px;
+			padding: .5em 0;
+		}
+
+		button {
+			background-color: @cardblue;
+			color: white;
+			&:hover {
+				color: #ccc;
+			}
+
+			&:active , &:focus {
+				color: white;
+			}
+		}
+	}
+
+	a:focus {
+		text-decoration: none;
+	}
+
+	footer.footer {
+		text-align: right;
+		font-size: 10px;
+		font-variant: small-caps;
+	}
+	
+	#bookswrapper {
+		.view-ttc-book {
+			position:relative;
+			float: left;	
+		    padding: .3em;
+		    margin: .3em;
+		    background-color: #f2f0e4;
+		    border-radius: 3px;
+		    .view-header {
+		    	font-size: 1.2em;
+		    	background-color: @bgwhite;
+		    	border-radius: 5px;
+		    	padding: .3em 2px;
+		    	font-weight: bold;
+		    	color: #197f87;
+		    }
+			.views-row {
+				margin-bottom: .3em;
+				margin-left: .2em;
+				.views-field-title {
+					font-weight: bold;
+					border-top:1px solid white;
+					margin-top: .6em;
+				}
+				&:first-child {
+					.views-field-title {
+						border-top: 0px solid white;
+						}
+				}
+				.views-field-field-text {
+					margin-bottom: 1em;
+					br {
+						margin-bottom: .8em;
+					}
+					p {
+						margin-bottom: 0;
+					}
+				}
+			}
+			
+		}
+	}
+}
+
+
+
+
+
+/* random overrides */
+
+@media screen and (max-width: 768px) {
+	#admin-menu {max-height: 30px;}
+	a.logo {
+		&:after {
+			content: 'Cryptoscience';
+			font-size: 40px;
+			color: black;
+			font-family: Forum;
+		}
+	}
+}

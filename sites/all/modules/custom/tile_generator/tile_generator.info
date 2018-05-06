@@ -1,0 +1,12 @@
+name = Tile  Generator
+
+description = fill a page with randomly generated pictures and text
+
+core = 7.x
+
+dependencies[] = libraries
+
+stylesheets[all][] = masonry.css
+
+scripts[] = masonry_config.js
+

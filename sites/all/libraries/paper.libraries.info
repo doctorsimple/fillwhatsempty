@@ -1,0 +1,5 @@
+name = Paper
+machine name = paper
+description = the PaperJS files
+version = 10
+files[js][] = dist/paper-full.min.js

@@ -1,0 +1,148 @@
+<?php
+
+/**
+ * @file
+ * Use the flickr API to get random images.
+ */
+require 'wikiwalk.class.php';
+
+function tile_generator_help($path) {
+    switch($path) {
+        case  'admin/help#tile_generator' :
+            return '' . t("Creates some random stuff");
+        break;
+    }
+};
+
+function form_tile_generator_form($form, &$form_state) {
+    $form['#attributes'] = array('class' => array('form-inline', 'pull-right'));
+    $form['term'] = array(
+        '#type' => 'textfield',
+        '#title' => 'or create your own:',
+        '#size' => 12,
+        '#attributes' => array('class' => array('form-inline'))
+
+    );
+    $form['submit_button'] = array(
+        '#type' => 'submit',
+        '#value' => 'Build Story'
+
+    );
+
+    return $form;
+}
+
+function form_tile_generator_form_submit($form, &$form_state) {
+
+}
+
+function tile_generator_block_info() {
+    $blocks['tile_generator'] = array(
+        'info' => t('Tile Generator Submit Form'),
+        'cache' =>  DRUPAL_CACHE_PER_ROLE
+    );
+    return $blocks;
+}
+
+function tile_generator_block_view($delta = '') {
+    $blocks = array();
+
+    switch ($delta) {
+        case 'tile_generator' :
+            $blocks['subject'] = t('Change term for grid');
+            $theblock = drupal_get_form('form_tile_generator_form');
+            $blocks['content'] = drupal_render($theblock);
+        break;
+    }
+    return $blocks;
+
+}
+
+function tile_generator_menu() {
+    $items = array();
+    $items['tilegenerator-fetch'] = array(
+        'title' => t('fetch  blocks'),
+        'type' => MENU_CALLBACK,
+        'page callback' => 'tile_generator_fetch',
+        'access arguments' => array('access content')
+    );
+    return $items;
+}
+
+function tile_generator_fetch($searchterm, $firstpage = true, $page = 1, $tilecount = 3) {
+    libraries_load('phpFlickr');
+
+    $userid = 'britishlibrary';
+
+    $output = '';
+
+    $sorttypes = array ('date-posted-asc', 'date-posted-desc', 'date-taken-asc', 'date-taken-desc', 'interestingness-desc', 'interestingness-asc','relevance');
+
+    $f = new phpFlickr('ba874a90d5fcedf9039e9f41f9a55cfd');
+
+    $thissort = $sorttypes[array_rand($sorttypes)];
+    //$f->enableCache('db', 'mysql://cryptosc_d7:fDk4z&O}]5Tx@localhost/cryptosc_d7');
+
+    $searchresult = $f->photos_search(array('user_id' => $userid, 'per_page' => $tilecount, 'page' => $page, 'text' => $searchterm, 'sort' => $thissort));
+
+    $wikiwalk=new Wikiwalk;
+
+    //krumo($searchresult['photo']);
+
+    foreach($searchresult['photo'] as $picinfo) {
+
+        if ($firstpage == true) {
+            $got = $wikiwalk->getrandompage($searchterm);
+            $firstpage = false;
+        } else {
+            $got = $wikiwalk->grabpage('/wiki/'.urlencode($searchterm));
+        }
+        $line = $wikiwalk->getrandomline($got);
+
+        $newlink = $wikiwalk->getrandomlink($line);
+
+        $searchterm = $newlink;
+
+        $thetext = strip_tags($line);
+
+         //drupal_add_js(array('Masonry' => array('nextpage' => $newlink)), 'setting');
+
+        $tiletemplate = 'sites/all/modules/custom/tile_generator/html/tile.html';
+        $imgurl = sprintf("https://farm%s.staticflickr.com/%s/%s_%s_z.jpg", $picinfo['farm'], $picinfo['server'], $picinfo['id'],$picinfo['secret']);
+        $output .= parsetiletemplate($tiletemplate,$imgurl, $thetext, $newlink);
+
+    }
+    if ($newlink) {
+        $output .= '<script>Drupal.settings.Masonry.nextpage="' . $newlink . '"</script>';
+    }
+    print $output;
+    drupal_exit();
+}
+
+function tile_generator_node_view($node, $view_mode, $langcode){
+
+    //krumo($node);
+    if ($node->content['#bundle'] == 'grid_page') {
+        if ($path = libraries_get_path('masonry')) {
+            drupal_add_js($path.'/masonry.pkgd.min.js');
+          //  drupal_add_js($path.'/imagesloaded.pkgd.min.js');
+            drupal_add_js(array('Masonry' => array('active' => true, 'nodeid' => $node->nid, 'searchterm' => $node->field_tag['und'][0]['safe_value'], 'nextpage' => null)), 'setting');
+        }
+
+    }
+};
+
+function parsetiletemplate($handle, $src, $text, $title) {
+    $output = '';
+    $temfile = fopen($handle, 'r');
+    $searcharray = array("{{src}}", "{{text}}", "{{title}}");
+    $replacearray = array( $src, $text, $title);
+    while ($temline = fgets($temfile)) {
+        $temline = str_replace($searcharray, $replacearray , $temline);
+        $output .= $temline;
+    }
+    fclose($temfile);
+    return $output;
+}
+
+

@@ -1,0 +1,52 @@
+/**
+ * Place your custom styles here.
+ */
+body {background-color: #65cc9a;color:#333333;}
+
+.navbar-default {background-color:inherit;background-image: url('/pictures/graphpaperrepeat.png');min-height: 100px;}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color:inherit;
+    border-width: 1px; 2px 5px 4px rgba(0, 0, 0, 0.05);
+}
+.navbar-header {
+    margin:1%;
+    z-index:10;
+    position:relative;
+}
+#navbar #logo-second {
+    background: #65cc9a url("/pictures/graphpaperfadeend.png") no-repeat scroll left top;
+    position:absolute;
+    width:18%;
+    height: 100px;
+    top:3px;
+    right:0;
+}
+#navbar #logo-second img {
+    position: absolute;
+    right: 20%;
+    top: 10px;
+}
+
+.page-header {color:#df0028;}
+
+.well {background-color:inherit; border-width: 1px; 2px 5px 4px rgba(0, 0, 0, 0.05);}
+
+.nav-pills > li > a {border-radius: 5px;}
+
+
+#portfolio-table td.caption {padding:10px;}
+#portfolio-table td.screenshot {text-align:right;}
+
+#quizgrid td {padding-top:20px;}
+#quizgrid input {margin-top:4px;}
+#quizgrid input {color:#333;}
+
+
+@media (max-width: 768px) {
+    #navbar #logo-second img { opacity: .2;}
+    #portfolio-table td {display: inline-block; border:none;padding:0 0 10px 5px;text-align:center;}
+    #portfolio-table td.screenshot {text-align:center;width:100%;}
+
+}

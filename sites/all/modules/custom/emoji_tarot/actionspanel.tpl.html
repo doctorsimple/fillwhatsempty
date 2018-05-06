@@ -1,0 +1,7 @@
+<div class="actionspanel">
+
+<button role="button" href="" class="btn" id="drawcardbutton" ng-click="drawcard('showcards')">{{dealacardtext}}</button>
+<button role="button" href="" class="btn" id="drawthreecardsbutton" ng-show="showcards.length == 0" ng-click="drawthreecards('showcards')">Deal a three card spread.</button>
+<button role="button" href="" class="btn" id="shufflebutton" ng-show="showcards.length" ng-click="shufflethedeck('showcards')">Reshuffle the deck.</button>
+
+</div>

@@ -1,0 +1,7 @@
+name = Post WOTD to Facebook
+
+description = What it says
+
+core = 7.x
+
+dependencies[] = fboauth

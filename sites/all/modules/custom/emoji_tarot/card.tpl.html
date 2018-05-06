@@ -1,0 +1,23 @@
+<div class="tarotcard">
+	<div class="innerwrap">
+		<div class="graphics">
+		<div ng-show="$ctrl.card.pattern==1" class="singleemoji">
+		<span ng-bind-html="$ctrl.parsedemoji[0]"></span>
+		</div>
+		<div ng-show="$ctrl.card.pattern==2" class="twoemoji">
+		<span ng-bind-html="$ctrl.parsedemoji[0]"></span>
+		<span ng-bind-html="$ctrl.parsedemoji[1]"></span>
+		</div>
+		<div ng-show="$ctrl.card.pattern==3" class="twoemojihoriz">
+		<span ng-bind-html="$ctrl.parsedemoji[0]"></span>
+		<span ng-bind-html="$ctrl.parsedemoji[1]"></span>
+		</div>		
+		<div ng-show="$ctrl.card.pattern==4" class="threeemoji">
+		<span ng-bind-html="$ctrl.parsedemoji[0]"></span>
+		<span ng-bind-html="$ctrl.parsedemoji[1]"></span>
+		<span ng-bind-html="$ctrl.parsedemoji[2]"></span>	
+		</div>
+		</div>
+		<div class="title">{{$ctrl.card.cardtitle}}</div>
+	</div>
+</div>

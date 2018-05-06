@@ -1,0 +1,9 @@
+name = Emoji Tarot
+
+description = create a randomized tarot deck for  user built from emojis
+
+core = 7.x
+
+dependencies[] = libraries
+
+stylesheets[all][] = emojitarot.css

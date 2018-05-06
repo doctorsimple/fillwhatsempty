@@ -1,0 +1,15 @@
+/***  noun_list table already created by hand ***/
+
+function emoji_tarot_schema() {
+	$schema['tarot_users'] = array(
+		'description' => 'A list of names used for completely insecure identification of a past visitor',
+		'fields' = array(
+			'nid' = array(
+				'description' => 'Primary Key',
+				'type' => 'varchar',
+				'length' => 128
+			)
+		)
+	)
+	return $schema;
+}

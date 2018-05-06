@@ -1,0 +1,5 @@
+.grid-item {max-width:366px; border: 1px solid #ffffff; float:left; margin-bottom:12px; background-color: #ffffff; box-shadow: 2px 1px 4px 2px #ddd;}
+.grid-item .outer-frame {text-align:center;}
+.grid-item img {margin: 5px auto;max-width:352px;}
+.inner-frame {border: 3px solid #fefbea; padding: 1em;margin:-3px 6px 4px; font-family: 'Rancho', 'Open Sans', serif; font-size:22px;}
+nav #form-tile-generator-form {margin-top:-45px;}

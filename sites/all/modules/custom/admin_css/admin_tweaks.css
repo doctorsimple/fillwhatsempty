@@ -1,0 +1,22 @@
+@CHARSET "ISO-8859-1";
+
+/* ADMIN PAGES */
+#dashboard_main .view-all-wotd .field-name-field-pub-date fieldset {
+  padding: 0;
+}
+#dashboard_main .view-all-wotd .field-name-field-pub-date fieldset .fieldset-wrapper{
+padding: 0;
+}
+#dashboard_main .view-all-wotd .views-row {
+  border-top: 5px solid #008888;
+  padding: 8px 0 5px 0;
+  clear: both;
+}
+#dashboard_main .view-all-wotd .views-field-field-pub-date {
+	width:50%;
+	text-align:right;
+	float:right;
+}
+#dashboard_main .view-all-wotd .views-field {
+	display: inline-block;
+}

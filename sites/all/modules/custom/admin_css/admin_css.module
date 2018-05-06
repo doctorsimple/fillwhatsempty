@@ -1,0 +1,11 @@
+<?php 
+
+function admin_css_preprocess_html(&$variables) {
+// Add conditional stylesheets for admin pages on admin theme.
+  if (arg(0)=="admin") {
+    // reference your current admin theme  
+    $theme_path = drupal_get_path('theme', 'seven');
+    // reference your own stylesheet    
+    drupal_add_css(drupal_get_path('module', 'admin_css').'/admin_tweaks.css', array('weight' => CSS_THEME));
+  }
+}

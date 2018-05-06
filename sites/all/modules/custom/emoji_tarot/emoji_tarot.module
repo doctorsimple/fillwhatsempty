@@ -1,0 +1,227 @@
+<?php
+
+/**
+ * @file
+ * Ceate and display the emoji tarot
+ */
+define ( "DECK_LENGTH", 37 );
+define ( "NUMBER_OF_EMOJI", 668 );
+function emoji_tarot_preprocess_page(&$vars, $hook) {
+	// krumo($vars['node']);
+	if (array_key_exists ( 'node', $vars ) && $vars ['node']->type == 'tarot_page') {
+		drupal_add_js ( 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.2/angular.min.js', 'external' );
+		drupal_add_js ( 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.2/angular-cookies.js', 'external' );
+		drupal_add_js ( 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular-animate.js', 'external' );
+		drupal_add_js ( 'https://twemoji.maxcdn.com/2/twemoji.min.js', 'external' );
+		drupal_add_js ( drupal_get_path ( 'module', 'emoji_tarot' ) . '/emojitarot.js' );
+		drupal_add_js ( array (
+				'emojitarot' => array () 
+		), 'setting' );
+		if (key_exists ( 'tarot_user', $_COOKIE )) {
+			$usergreeting = t ( "Hi " . explode ( '+', $_COOKIE ['tarot_user'] ) [0] . ", welcome back." );
+			$q = db_query ( 'SELECT deckJSON from `emoji_tarot_users` WHERE name = :username', array (
+					':username' => $_COOKIE ['tarot_user'] 
+			) );
+			$result = $q->fetchField ();
+			if ($result) {
+				drupal_add_js ( array (
+						'emojitarot' => array (
+								'deck' => $result 
+						) 
+				), 'setting' );
+				$vars ['page'] ['content']['main'] ['hello'] = array (
+						'#markup' => "<p class='tarot-dialog col-sm-4'>$usergreeting</p>" 
+				);
+			} else {
+				// Insert the name collection form
+				$vars ['page'] ['content']['main'] ['hello'] = drupal_get_form ( 'form_emoji_tarot_form' );
+			}
+		} else {
+			// Insert the name collection form
+			$vars ['page'] ['content']['main'] ['hello'] = drupal_get_form ( 'form_emoji_tarot_form' );
+		}
+		$vars ['page'] ['content']['main'] ['hello']['#prefix'] = '<div class="row">';
+		$vars['page']['content']['#prefix'] = '<div class="container">';
+		$vars['page']['content']['#suffix'] = '</div>';
+		
+	}
+}
+function emoji_tarot_page_alter(&$page) {
+	if ($page ['#type'] === "page" && key_exists ( 'content', $page ) && key_exists ( 'system_main', $page ['content'] ) && key_exists ( 'nodes', $page ['content'] ['system_main'] ) && key_exists ( '644', $page ['content'] ['system_main'] ['nodes'] )) {
+		$page ['content']['main'] ['preamble'] = array (
+				'#title' => t ( 'Welcome' ),
+				'#weight' => 30,
+				'#markup' => t ( '
+				<actionspanel ng-cloak class="col-sm-6"></actionspanel>	</div><!--end row-->
+	 			<div class="cardlist" ng-cloak ng-class="{userfound : deck.length}"><tarotcard card="card" class="deckelement" ng-repeat="card in showcards track by $index"></tarotcard></div>
+	 			' ) 
+		);
+		$page ['content'] ['#sorted'] = FALSE;
+	}
+}
+// function emoji_tarot_menu() { // Callback to fetch user deck
+// 	$items = array ();
+// 	$items ['emoji-tarot-deck-fetch'] = array (
+// 			'title' => t ( 'get deck for this userId' ),
+// 			'type' => MENU_CALLBACK,
+// 			'page callback' => 'emoji_tarot_fetch',
+// 			'access arguments' => array (
+// 					'access content' 
+// 			) 
+// 	);
+// 	return $items;
+// }
+function emoji_tarot_get_random_noun() {
+	$result = db_query ( 'SELECT noun from `noun_list` ORDER BY RAND() LIMIT 1' );
+	if ($result) {
+		if (rand ( 1, 10 ) < 8) {
+			return "The " . ucfirst ( $result->fetch ()->noun );
+		} else {
+			return $result->fetch ()->noun;
+		}
+	} else {
+		return "The Fool";
+	}
+}
+function form_emoji_tarot_form($form, &$form_state) {
+	$form ['#attributes'] = array (
+			'class' => array (
+					'form-inline tarot-dialog',
+					'' 
+			) 
+	);
+	$form ['name'] = array (
+			'#type' => 'textfield',
+			'#title' => "What's your name?",
+			'#size' => 30,
+			'#attributes' => array (
+					'class' => array (
+							'form-inline' 
+					),
+					'required' => array(
+							'required'
+					)
+			),
+			'#prefix' => '<span id="edit_name_wrapper">' 
+	);
+	$form ['submit_button'] = array (
+			'#type' => 'submit',
+			'#value' => 'Send',
+			'#ajax' => array (
+					'callback' => 'emoji_tarot_check_for_user',
+					'progress' => array (
+							'type' => 'throbber' 
+					),
+					'wrapper' => 'edit_name_wrapper' 
+			),
+			'#suffix' => '</span>' 
+	)
+	;
+	
+	return $form;
+}
+function emoji_tarot_check_for_user($form, $form_state) {
+	$name = t ( $form_state ['values'] ['name'] );
+	$username = str_replace ( " ", "", ($name . '+' . ip_address ()) );
+	$q = db_query ( 'SELECT deckJSON from `emoji_tarot_users` WHERE name = :username', array (
+			':username' => $username 
+	) );
+	$result = $q->fetchField ();
+	if ($result) {
+		drupal_add_js ( array (
+				'emojitarot' => array (
+						'deck' => $result 
+				) 
+		), 'setting' );
+	} else {
+		// C1reate the deck. Array of objects {title, pattern type, [emoji]
+		$deck = [ ];
+		for($i = 0; $i < DECK_LENGTH; $i ++) {
+			$deck [$i] ['title'] = emoji_tarot_get_random_noun ();
+			$spinthewheel = rand ( 1, 12 );
+			switch ($spinthewheel) {
+				case 1 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 2 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 3 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 4 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 5 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 6 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 7 :
+					$deck [$i] ['pattern'] = 1;
+					break;
+				case 8 :
+					$deck [$i] ['pattern'] = 3;
+					break;
+				case 9 :
+					$deck [$i] ['pattern'] = 4;
+					break;
+				case 10 :
+					$deck [$i] ['pattern'] = 2;
+					break;
+				case 11 :
+					$deck [$i] ['pattern'] = 2;
+					break;
+				case 12 :
+					$deck [$i] ['pattern'] = 3;
+					break;
+			}
+			
+			switch ($deck [$i] ['pattern']) {
+				
+				case 2 :
+				case 3 :
+					$deck [$i] ['emoji'] = array (
+							rand ( 0, NUMBER_OF_EMOJI - 1 ),
+							rand ( 0, NUMBER_OF_EMOJI - 1 ) 
+					);
+					break;
+				case 4 :
+					$deck [$i] ['emoji'] = array (
+							rand ( 0, NUMBER_OF_EMOJI - 1 ),
+							rand ( 0, NUMBER_OF_EMOJI - 1 ),
+							rand ( 0, NUMBER_OF_EMOJI - 1 ) 
+					);
+					break;
+				default :
+					$deck [$i] ['emoji'] = array (
+							rand ( 0, NUMBER_OF_EMOJI - 1 ) 
+					);
+					break;
+			}
+		}
+		
+		drupal_add_js ( array (
+				'emojitarot' => array (
+						'deck' => $deck 
+				) 
+		), 'setting' );
+		
+		drupal_add_js ( array (
+				'emojitarot' => array (
+						'IPaddress' => ip_address () 
+				) 
+		), 'setting' ); // Not currently used
+		
+		$q = db_insert ( 'emoji_tarot_users' )->fields ( array (
+				'name' => $username,
+				'deckJSON' => JSON_encode ( $deck ) 
+		) )->execute ();
+	}
+	
+	setcookie ( 'tarot_user', $username, time () + 60 * 60 * 24 * 30, '/', 'cryptoscience.com' );
+	
+	
+	return "<div class='row'><div class='tarot-dialog col-sm-4'>Hi " . $name .'</div>';
+}

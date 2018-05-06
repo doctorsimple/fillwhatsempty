@@ -1,0 +1,4 @@
+name = admin css
+description = CSS tweaks for the admin theme
+core = 7.x
+package = Administration

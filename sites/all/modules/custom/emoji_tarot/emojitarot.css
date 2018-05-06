@@ -1,0 +1,182 @@
+@CHARSET "ISO-8859-1";
+tarotcard {
+	float: left;
+	margin: 1em;
+	overflow:hidden;
+	border-radius: 6px;
+	box-shadow:-1px -1px 3px 0 #333;
+}
+
+.tarotcard {
+	position: relative;
+	background-color: #faf6ec;
+}
+
+.tarotcard .innerwrap {
+	height: 100%;
+	position: relative;
+}
+
+.tarotcard .graphics {
+	height: 88%;
+	text-align: center;
+}
+
+.tarotcard .title {
+	font-size: 24px;
+	text-transform: uppercase;
+	position: relative;
+	text-align: center;
+	bottom: 12px;
+	line-height: 20px;
+}
+
+@media screen and (min-width: 600px) {
+	tarotcard.deckelement {
+		width: 250px;
+		height: 350px;
+		}
+	.tarotcard {
+		width: 250px;
+		height: 350px;
+		border: tan solid 6px;
+		border-radius: 6px;
+	}
+	.tarotcard .innerwrap {
+		margin: 10px;
+	}
+	.tarotcard .singleemoji {
+	font-size: 150px;
+	}
+	.tarotcard .twoemoji {
+	font-size: 92px;
+	padding-top: 10px;
+	}
+	.tarotcard .twoemojihoriz {
+	font-size: 64px;
+	padding-top: 85px;
+	}	
+	.tarotcard .threeemoji {
+	font-size:72px;
+	padding-top: 20px
+	}
+	.tarotcard .twoemoji span {
+	display: block;
+	}
+	.tarotcard .twoemojihoriz span {
+	display: inline-block;
+	}
+	.tarotcard .threeemoji span {
+	display: inline-block;
+	}
+	.tarotcard .threeemoji span:first-child {
+	display: inline-block;
+	font-size:56px;
+	}
+	 .tarotcard .threeemoji span:last-child {
+	 font-size: 88px;
+	}
+	
+/*Animations */	
+	.deckelement.ng-enter {
+		animation: .15s cardappear;
+	}
+	@keyframes cardappear {
+		from { width:0; }
+		to { width:250px; }
+	}
+	
+	.deckelement.ng-leave {
+		animation: .6s carddisappear;
+		-webkit-animation: .6s carddisappear;
+	}
+	@keyframes carddisappear {
+		from { width:250px; }
+		to { width:0; }
+	}	
+}
+
+@media screen and (max-width: 599px) {
+	tarotcard.deckelement {
+	width: 125px;
+	height: 175px;
+	}
+	.tarotcard {
+		width: 125px;
+		height: 175px;
+		border: tan solid 3px;
+		border-radius: 3px;
+	}
+	.tarotcard .innerwrap {
+		margin: 5px;
+	}
+	.tarotcard .title {
+	font-size: 16px;
+	line-height: 14px;
+	}
+		.tarotcard .singleemoji {
+	font-size: 64px;
+	}
+
+	.tarotcard .twoemoji {
+	font-size: 46px;
+	padding-top: 5px;
+	}
+	.tarotcard .twoemojihoriz {
+	font-size: 32px;
+	padding-top: 40px;
+	}	
+	.tarotcard .threeemoji {
+	font-size:36px;
+	padding-top: 10px
+	}
+	.tarotcard .twoemoji span {
+	display: block;
+	}
+	.tarotcard .twoemojihoriz span {
+	display: inline-block;
+	}
+	.tarotcard .threeemoji span {
+	display: inline-block;
+	}
+	.tarotcard .threeemoji span:first-child {
+	display: inline-block;
+	font-size:27px;
+	}
+	 .tarotcard .threeemoji span:last-child {
+	 font-size: 44px;
+	}
+/**** Animations ***/
+
+.deckelement.ng-enter {
+	animation: .15s cardappear;
+	-webkit-animation: .15s cardappear;
+	
+}
+@keyframes cardappear {
+	from { width:0; }
+	to { width:125px; }
+}
+
+.deckelement.ng-leave {
+	animation: .6s carddisappear;
+	-webkit-animation: .6s carddisappear;
+}
+@keyframes carddisappear {
+	from { width:125px; }
+	to { width:0; }
+}	
+}
+
+.cardlist {
+	opacity: 0;
+}
+.cardlist.userfound { 
+	background: url("/sites/default/files/card-back.png") no-repeat 5px 5px;
+	min-height: 400px;
+	opacity : 1;
+	transition: opacity 3s;
+}
+
+
+
