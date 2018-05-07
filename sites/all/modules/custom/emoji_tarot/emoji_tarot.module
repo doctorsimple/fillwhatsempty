@@ -220,7 +220,7 @@ function emoji_tarot_check_for_user($form, $form_state) {
 		) )->execute ();
 	}
 	
-	setcookie ( 'tarot_user', $username, time () + 60 * 60 * 24 * 30, '/', 'cryptoscience.com' );
+	setcookie ( 'tarot_user', $username, time () + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST'] );
 	
 	
 	return "<div class='row'><div class='tarot-dialog col-sm-4'>Hi " . $name .'</div>';
