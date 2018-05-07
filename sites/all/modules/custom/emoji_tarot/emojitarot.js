@@ -123,4 +123,12 @@ tarotApp.controller('tarotCtrl', ['$scope', '$cookies' , '$window', '$animate', 
 	
 }]);
 
+jQuery(function($) {
+	$('.submitonenter').keyup( function(e) {
+		if (e.keyCode == 13) {
+			$(e.currentTarget.form).find('.btn.form-submit').mousedown();
+		}
+	});
+});
+
 

@@ -96,7 +96,7 @@ function form_emoji_tarot_form($form, &$form_state) {
 			'#size' => 30,
 			'#attributes' => array (
 					'class' => array (
-							'form-inline' 
+							'form-inline submitonenter'
 					),
 					'required' => array(
 							'required'
@@ -105,7 +105,7 @@ function form_emoji_tarot_form($form, &$form_state) {
 			'#prefix' => '<span id="edit_name_wrapper">' 
 	);
 	$form ['submit_button'] = array (
-			'#type' => 'submit',
+			'#type' => 'button',
 			'#value' => 'Send',
 			'#ajax' => array (
 					'callback' => 'emoji_tarot_check_for_user',
