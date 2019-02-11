@@ -17,11 +17,45 @@ jQuery('document').ready(function() {
 });
 
 Drupal.settings.abouttext = {
-    'frontpage' : 'This is a demo of CSS animations and basic jQueryUI behaviors. The images are photocollages of console 8-bit video games emulated with Mame.',
+    'frontpage' : 'Mouseover me, the helpful jackalope, to see a little colophon about each page describing how it was built.',
+    'page__blobs' : 'This is a demo of CSS animations and basic jQueryUI behaviors. The images are photocollages of console 8-bit video games emulated with Mame.',
     'page__grid_page' : 'This uses a PHP library that accesses the flickr API, a wikipedia scraper that I wrote,  and a js library called Masonry, wrapped up in a Drupal module. The flickr stream used is scans of old books from the British library.',
     'page__tarot_page' : 'This little app uses the Angular JS framework. User information is stored in the DB, user identity is retrieved from a cookie based on the name provided and IP address - not a real identity schema that you would use for anything important. No images, the pictures are all from the standard Unicode emoji set',
     'page__page' : 'See description in right sidebar. It\'s attractively designed.'
 };
+
+Drupal.behaviors.frontpage = {
+    attach: function(context) {
+        $billboards = jQuery('h1.billboard');
+        // $billboards.eq(0).hover(
+        //     function(e) {
+        //         jQuery('body.front').toggleClass('grayscale');
+        //     }
+        // );
+        // $billboards.eq(1).hover(
+        //     function(e) {
+        //         jQuery('body.front').toggleClass('saturated');
+        //     }
+        // );
+        // $billboards.eq(2).hover(
+        //     function(e) {
+        //         jQuery('body.front').toggleClass('blurred');
+        //     }
+        // );
+        $billboards.on('click', 'a',  function(e) {
+            $target = jQuery(e.target);
+            $billboard = $target.parent('.billboard');
+            jQuery('body.front').removeClass('grayscale saturated mosaic blurred');
+            $billboards.off('mouseenter mouseleave').css('transform','none').find('a');
+            $billboard.append('<div class="flipboard-panel"><div class="loading-icon">WAIT</div></div>').find('a').animate({'font-size': 0}, 1000);;
+            jQuery.get('/randomflickrpic/'+$billboard.data('keyword'), function(data) {
+                $billboard.find('.flipboard-panel').removeClass('loading').find('.loading-icon').replaceWith(data);
+            });
+        });
+    }
+
+}
+
 
 Drupal.behaviors.videocollage = {
     attach: function (context) {
@@ -55,7 +89,7 @@ Drupal.behaviors.videocollage = {
 
             }
             var growbubble = grow.bind($thebubble);
-            growing = setInterval(growbubble, 50);
+            growing = setInterval(growbubble, 20);
         }).on('mouseup', function(e) {
             clearInterval(growing);
             jQuery('h1.page-header').not(".finished").text('2) Try it again. Or drag your bubble around.');
@@ -90,51 +124,3 @@ Drupal.behaviors.videocollage = {
 
     }
 };
-
-Drupal.behaviors.ttc = {
-		attach : function(context) {
-			jQuery('#addtranslator').on('click', function(e){
-				var $t = jQuery('#translators');
-				var tname = $t.val();
-				var $bookswrapper = jQuery('#bookswrapper');
-				$t.find('option[value="'+tname+'"]').remove();
-				$bookswrapper.append("<div id='tilethrobber'><i class='glyphicon glyphicon-refresh glyphicon-spin'></i></div>");
-				jQuery.post(
-						Drupal.settings.basePath+'views/ajax',
-						{
-							view_name : 'ttc_book',
-							view_display_id : 'block',
-							view_args : tname
-						},
-						function(response) {
-						    if (response[1] !== undefined) 
-						    {
-						        var viewHtml = response[1].data;
-						        $bookswrapper.find('#tilethrobber').remove();
-						        $bookswrapper.append(viewHtml);
-						        //adjust widths
-						        var bookscount = jQuery('.view-ttc-book').length;
-						        $bookswrapper.find('.view-ttc-book').css('max-width', ((99-bookscount)/ bookscount) + '%' )
-						        //Adjust row heights
-						        .last().find('.views-row').each( function(i){
-						        	$this = jQuery(this);
-						        	var currheight = $this.outerHeight();
-						        	var $samerows = jQuery('.views-row-' + (i+1), context);
-						        	$samerows.each( function() {
-						        		var $subthis = jQuery(this), myheight =  $subthis.outerHeight()
-						        		if (myheight < currheight) {
-						        			$subthis.outerHeight(currheight);
-						        		} else if (myheight > currheight) {
-						        			$this.outerHeight(myheight);
-						        			currheight = myheight;
-						        		}
-						        		
-						        	});
-						        });
-
-						    }
-						}
-				)
-			});
-		}
-}

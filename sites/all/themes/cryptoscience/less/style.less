@@ -4,11 +4,10 @@
 @linkblue: #337ab7;
 @cardblue: #0055aa;
 
-@tabbackground: linear-gradient(to right, rgba(239,246,194,0.65) 0%,rgba(0,0,0,0.1) 100%);
+@tabbackground: linear-gradient(to right, rgba(239,246,194,0.65) 0%,rgba(220,200,160,0.1) 100%);
 
 
 /** mobile */
-
 nav {
 	ul.menu.navbar-nav {
 		li {
@@ -96,7 +95,7 @@ nav {
 }
 
 /*desktop */
-@media (min-width: @screen-md-min) {
+@media (min-width: 400px) {
 	body.node-type-grid-page {
 		background-color: @bgwhite;
 		.page-header {
@@ -201,6 +200,7 @@ nav {
 							font-size: 32px;
 							color: @linkblue;
 							background: @tabbackground;
+                          background-color: #ddd;
 							z-index: 5;
 							border: 4px solid @bordergreen;
 							border-radius: 8px;
@@ -224,16 +224,29 @@ nav {
                               }
 							}
 
-							&::before {
-								content: "|";
-								font-size: 48px;
-								position: absolute;
-								top: -37px;
-								left: 50%;
-								z-index: 1;
-							}
 						}
 					}
+				}
+			}
+		}
+		.floating-menu {
+			line-height: 3;
+			a {
+				position: relative;
+				font-size: 2vw;
+				color: @linkblue;
+				background: @tabbackground;
+				background-color: #ddd;
+				z-index: 15;
+				border: 4px solid @bordergreen;
+				border-radius: 8px;
+				padding: 12px 6px;
+				box-shadow: 1px 2px 2px #999;
+				&:hover {
+					background-color: #FBD97E;
+					color: @bordergreen;
+					box-shadow: none;
+					text-decoration: none;
 				}
 			}
 		}
@@ -278,6 +291,83 @@ nav {
 		}
 	}
 
+	/*header elements */
+	#block-tile-generator-tile-generator {
+		position:absolute;
+		bottom:5px;
+		right: 100px;
+		margin:-10px;
+	}
+    body.front {
+		min-height: 90vh;
+		background-image: url(/pictures/wall-bg.jpg);
+		background-size: cover;
+		background-attachment: fixed;
+		transition: all 1s;
+		&.grayscale {
+			filter: grayscale(1);
+		}
+		&.saturated {
+			filter: saturate(300%);
+		}
+		&.mosaic {
+			background-size: 10%;
+			background-repeat:repeat;
+		}
+      &.blurred {
+        filter: blur(2px);
+      }
+		#navbar {
+			background-color: transparent;
+          border-color: transparent;
+		}
+     .page-header {
+       display: none;
+     }
+
+      h1.billboard {
+        font-family: 'Poor Story', cursive;
+        font-size: 15vh;
+		text-shadow: 2px 3px 2px #000;
+        transition: all .6s;
+		  clear: both;
+        a {
+          text-decoration: none;
+		  display: inline-block;
+          transition: all .6s;
+		}
+		  .flipboard-panel {
+			  text-align: right;
+			  float: right;
+			  min-height: 25vh;
+			  transform: skew(0deg);
+			  img {
+				  max-height: 25vh;
+				  margin-right: 3rem;
+				  margin-top: -16.5vh;
+				  margin-bottom: 16.5vh;
+				  width: 25vw;
+				  transform: none;
+			  }
+			  .loading-icon {
+                color: @bordergreen;
+                margin-top: -12vh;
+                background-color: black;
+				  opacity:.8;
+			  }
+		  }
+	  }
+      h1.billboard a:hover {
+        color: @bordergreen;
+        transform: skewX(-5deg);
+      }
+      //h1.billboard:nth-child(2):hover {
+      //  transform: rotate(4deg);
+      //}
+      //h1.billboard:nth-child(3):hover {
+      //  transform: skewX(5deg);
+      //}
+    }
 	.frontpagewrapper {
 		width: 100%;
 		position: relative;
@@ -580,10 +670,14 @@ nav {
 	#admin-menu {max-height: 30px;}
 	a.logo {
 		&:after {
-			content: 'Cryptoscience';
 			font-size: 40px;
 			color: black;
 			font-family: Forum;
 		}
 	}
+    body.front {
+      h1.billboard {
+        font-size: 9vh;
+      }
+    }
 }
