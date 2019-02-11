@@ -1,0 +1,55 @@
+#selectbuttonswrapper {
+    margin-bottom : .3em;
+}
+
+#selectbuttonswrapper button.translator-select {
+    border: 3px solid background: rgb(227,236,207);
+}
+
+#bookswrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow:auto;
+    height: 100%;
+    bottom: 10px;
+}
+#bookswrapper .view-version-comparator-book {
+    margin: 0 1em 0 0;
+    border: 2px black solid;
+    border-radius: 2px;
+    flex: 0 1 100%;
+    background: rgb(227,236,207);
+}
+#bookswrapper .views-row {
+    padding: 1em .6em 2em;
+    align-self: flex-start;
+    background-color: white;
+    border-radius: 2px;
+    border: 4px solid #cccccc;
+    margin: 5px 0;
+    width:100%
+}
+
+#bookswrapper  .vc-book-header {
+    line-height: 3em;
+    height: 3em;
+    height: 3em;
+    font-size: 1.2vw;
+    top:0;
+    background: rgb(227,236,207);
+    background: linear-gradient(120deg, rgba(227,236,207,0.968207351299895) 0%, rgba(207,203,157,1) 100%);
+    text-align: left;
+}
+#bookswrapper  .vc-book-header .translator-name {
+    margin-left: .4em;
+}
+#bookswrapper .views-field-version-comparator-text {
+    white-space: pre-line;
+}
+#bookswrapper .views-field-title {
+    font-weight: bold;
+}
+#bookswrapper  .vc-book-header.affix {
+    border-bottom: 2px solid #cccccc;
+}

@@ -18,9 +18,9 @@ function form_tile_generator_form($form, &$form_state) {
     $form['#attributes'] = array('class' => array('form-inline', 'pull-right'));
     $form['term'] = array(
         '#type' => 'textfield',
-        '#title' => 'or create your own:',
+        '#title' => '▶',
         '#size' => 12,
-        '#attributes' => array('class' => array('form-inline'))
+        '#attributes' => array('class' => array('form-inline'), 'placeholder' => 'Select a word')
 
     );
     $form['submit_button'] = array(
@@ -65,6 +65,13 @@ function tile_generator_menu() {
         'type' => MENU_CALLBACK,
         'page callback' => 'tile_generator_fetch',
         'access arguments' => array('access content')
+    );
+    $items['randomflickrpic'] = array(
+        'title' => 'random flickr pic',
+        'page callback' => 'cryptoscience_flickr_randompic',
+        'access arguments' => array('access content'),
+         'type' => MENU_CALLBACK,
+          'delivery callback' => 'cryptoscience_flickr_randompic_callback'
     );
     return $items;
 }
@@ -144,5 +151,38 @@ function parsetiletemplate($handle, $src, $text, $title) {
     fclose($temfile);
     return $output;
 }
+
+
+
+
+function cryptoscience_flickr_randompic($searchterm) {
+    libraries_load('phpFlickr');
+
+    $sorttypes = array ('date-posted-asc', 'date-posted-desc', 'date-taken-asc', 'date-taken-desc', 'interestingness-desc', 'interestingness-asc','relevance');
+
+    $f = new phpFlickr('ba874a90d5fcedf9039e9f41f9a55cfd');
+
+    //$thissort = $sorttypes[array_rand($sorttypes)];
+    //$f->enableCache('db', 'mysql://cryptosc_d7:fDk4z&O}]5Tx@localhost/cryptosc_d7');
+
+    $searchresult = $f->photos_search(array('per_page' => 60,  'text' => $searchterm, 'sort' => $sorttypes[4], 'safe_search' => 2));
+
+    $key = array_rand($searchresult['photo'], 1);
+    $picinfo = $searchresult['photo'][ $key ];
+    //krumo ($searchresult, $key);
+
+    $imgurl = sprintf("https://farm%s.staticflickr.com/%s/%s_%s_z.jpg", $picinfo['farm'], $picinfo['server'], $picinfo['id'],$picinfo['secret']);
+
+    return "<img src='{$imgurl}' />";
+
+}
+function cryptoscience_flickr_randompic_callback($callback_result) {
+
+    print $callback_result;
+}
+
+
+
+
 
 

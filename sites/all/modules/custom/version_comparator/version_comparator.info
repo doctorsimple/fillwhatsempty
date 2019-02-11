@@ -1,0 +1,16 @@
+name = Version Comparator
+
+description = a tool for viewing different translations of a text simultaneously
+
+core = 7.x
+
+configure = admin/config/content/comparator
+
+dependencies[] = views
+dependencies[] =  libraries
+
+stylesheets[all][] = version_comparator.css
+
+scripts[] = version_comparator.js
+
+files[] = version_comparator.install

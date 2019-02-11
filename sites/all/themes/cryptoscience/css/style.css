@@ -7123,6 +7123,7 @@ nav ul.menu.navbar-nav li a.active-trail {
   body.front h1.billboard .flipboard-panel .loading-icon {
     color: #008888;
     margin-top: -12vh;
+    margin-right: 3rem;
     background-color: black;
     opacity: 0.8;
   }

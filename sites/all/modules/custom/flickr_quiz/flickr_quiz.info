@@ -1,0 +1,11 @@
+name = Flickr Quiz
+
+description = Pull images from flickr, create a quiz based on them
+
+core = 7.x
+
+dependencies[] = libraries
+
+stylesheets[all][] = flickr_quiz.css
+
+scripts[] = flickr_quiz.js

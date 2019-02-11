@@ -59,16 +59,16 @@ function cryptoscience_preprocess_page(&$vars)
 
         }
         // TTC comparator page
-        if ($vars['node']->nid == 2168) {
-        	//krumo (field_info_instances('node','ttc_verse'));
-        	$result = db_query('SELECT DISTINCT field_translator_value FROM {field_data_field_translator} ');
-        	
-        	while ($row = $result->fetchAssoc()) {
-        		$translatorlist[] = $row['field_translator_value'];
-        	}
-        	
-        	$vars['translatorlist'] = $translatorlist;
-        }
+//        if ($vars['node']->nid == 2168) {
+//        	//krumo (field_info_instances('node','ttc_verse'));
+//        	$result = db_query('SELECT DISTINCT field_translator_value FROM {field_data_field_translator} ');
+//
+//        	while ($row = $result->fetchAssoc()) {
+//        		$translatorlist[] = $row['field_translator_value'];
+//        	}
+//
+//        	$vars['translatorlist'] = $translatorlist;
+//        }
     }
 
     if ($vars['is_front'] == true) {
@@ -82,3 +82,4 @@ function cryptoscience_query_alter($query) {
         dpm($query->arguments());
     }
 }
+

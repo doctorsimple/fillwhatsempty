@@ -1,0 +1,130 @@
+<?php
+
+//Create custom content type for view
+
+function version_comparator_node_info() {
+    return array(
+        'vc_section' => array(
+            'name' => t('VC Section'),
+            'base' => 'node_content',
+            'description' => t('A chapter or whatever of the text that you want to use in the compatator'),
+            'has_title' => TRUE,
+        )
+    );
+}
+
+function _version_comparator_installed_fields() {
+    $t = get_t();
+    return array(
+        'version_comparator_chapter' => array(
+            'field_name' => 'version_comparator_chapter',
+            'label' => $t('Chapter'),
+            'type' => 'number_integer'
+        ),
+        'version_comparator_translator' => array(
+            'field_name' => 'version_comparator_translator',
+            'label' => $t('Translator'),
+            'type' => 'text'
+        ),
+        'version_comparator_text' => array(
+            'field_name' => 'version_comparator_text',
+            'label' => $t('Text'),
+            'type' => 'text_long'
+        )
+    );
+}
+
+function _version_comparator_installed_instances() {
+    $t = get_t();
+    return array(
+        'version_comparator_chapter' => array(
+            'field_name' => 'version_comparator_chapter',
+            'entity_type' => 'node',
+            'bundle' => 'vc_section',
+            'label' => $t('Chapter'),
+            'widget' => array(
+                'type' => 'textfield'
+            ),
+            'display' => array(
+                'example_node_list' => array(
+                    'label' => $t('Chapter'),
+                    'type' => 'text'
+                )
+            )
+        ),
+        'version_comparator_translator' => array(
+            'field_name' => 'version_comparator_translator',
+            'entity_type' => 'node',
+            'bundle' => 'vc_section',
+            'label' => $t('Translator'),
+            'widget' => array(
+                'type' => 'textfield'
+            ),
+            'display' => array(
+                'example_node_list' => array(
+                    'label' => $t('Translator'),
+                    'type' => 'text'
+                )
+            )
+        ),
+        'version_comparator_text' => array(
+            'field_name' => 'version_comparator_text',
+            'entity_type' => 'node',
+            'bundle' => 'vc_section',
+            'label' => $t('Chapter'),
+            'widget' => array(
+                'type' => 'textarea'
+            ),
+            'display' => array(
+                'example_node_list' => array(
+                    'label' => $t('Text'),
+                    'type' => 'text'
+                )
+            )
+        )
+    );
+}
+
+function version_comparator_add_custom_fields() {
+    foreach (_version_comparator_installed_fields() as $field) {
+        field_create_field($field);
+    }
+    foreach (_version_comparator_installed_instances() as $fieldinstance) {
+        $fieldinstance['entity_type'] = 'node';
+        $fieldinstance['bundle'] = 'vc_section';
+        //print_r($fieldinstance);
+        field_create_instance($fieldinstance);
+    }
+}
+
+function version_comparator_install() {
+    node_types_rebuild();
+
+    version_comparator_add_custom_fields();
+}
+
+function version_comparator_uninstall() {
+    $ournewtype = 'vc_section';
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $ournewtype));
+    $nodeids = array();
+    foreach ($result as $row) {
+        $nodeids[] = $row->nid;
+    }
+    node_delete_multiple($nodeids);
+    delete_custom_fields();
+    node_type_delete($ournewtype);
+    field_purge_batch(500);
+}
+
+function delete_custom_fields() {
+    foreach (array_keys(_version_comparator_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+    $instances = field_info_instances('node', 'vc_section');
+    foreach ($instances as $instance_name => $fieldinstance) {
+        field_delete_instance($fieldinstance);
+    }
+}
+
+

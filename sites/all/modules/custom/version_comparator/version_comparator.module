@@ -1,0 +1,88 @@
+<?php
+
+//Create a block type to display the comparison panels
+
+function version_comparator_help($path) {
+    switch($path) {
+        case  'admin/help#version_comparator' :
+            return '' . t("I'll explain later");
+            break;
+    }
+};
+
+function version_comparator_block_info() {
+    $blocks['comparator'] = array(
+      'info' => t('Comparator'),
+      'cache' => 'DRUPAL_CACHE_PER_PAGE'
+    );
+
+    return $blocks;
+}
+
+function version_comparator_preprocess_block(&$variables) {
+    if ($path = libraries_get_path('jquery-match-height-master')) {
+        drupal_add_js($path . '/jquery.matchHeight.js');
+    }
+}
+
+function version_comparator_block_view($delta = '') {
+    $result = db_query("SELECT DISTINCT version_comparator_translator_value from field_data_version_comparator_translator WHERE bundle=:contenttype", array (':contenttype' => variable_get('comparator_content_type')));
+    $listoftranslators = array();
+    while ($r = $result->fetchAssoc()) {
+        $listoftranslators[] = $r['version_comparator_translator_value'];
+    }
+    //$options = implode('</option><option>', $listoftranslators);
+    $buttons = [];
+    foreach ($listoftranslators as $translator) {
+        array_push($buttons, '<button class="btn btn-default translator-select" value="'. $translator . '"> '. $translator .'  </button>');
+    }
+
+
+    switch ($delta) {
+        case 'comparator' :
+            $block['content'] = array(
+              '#type' => 'markup',
+            //  '#markup' => "<select id='translators' > <option>{$options}</option> </select> <button role='button' id='addtranslator'>Add This</button> <div id='bookswrapper'></div>"
+                '#markup' => '<div id="selectbuttonswrapper">' . implode($buttons, ' ' ). '</div><div id=\'bookswrapper\'></div>'
+            );
+    }
+    return $block;
+}
+
+variable_set('comparator_content_type', 'vc_section');
+
+//function version_comparator_menu() {
+//    $items = array();
+//
+//    $items['admin/config/content/comparator'] = array(
+//        'title' => 'Comparator Content Type',
+//        'description' => 'Content type to use in the comparator blocks',
+//        'page callback' => 'drupal_get_form',
+//        'page arguments' => array('version_comparator_admin_form'),
+//        'access arguments' => array('access administration pages'),
+//        'type' => MENU_NORMAL_ITEM
+//    );
+//    return $items;
+//}
+//
+//function version_comparator_admin_form($form, &$form_state) {
+//    $nodetypes = node_type_get_names();
+//
+//    $form['comparator_content_type'] = array(
+//        '#type' => 'select',
+//        '#title' => 'Content type for comparison',
+//        '#default_value' => variable_get('comparator_content_type'),
+//        '#options' => $nodetypes
+//    );
+//    return system_settings_form($form);
+//}
+
+function version_comparator_views_api() {
+    return array(
+        'api' => 3
+    );
+}
+
+
+
+

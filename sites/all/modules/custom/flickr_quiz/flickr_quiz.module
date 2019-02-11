@@ -1,0 +1,57 @@
+<?php
+
+function flickr_quiz_block_info() {
+$blocks['flickr_quiz'] = array(
+'info' => t('Flickr Quiz'),
+'cache' =>  DRUPAL_CACHE_PER_ROLE
+);
+return $blocks;
+}
+
+function flickr_quiz_block_view($delta = '') {
+$blocks = array();
+
+if ($delta == 'flickr_quiz') {
+    $block['content'] = flickr_quiz_generate_quiz();
+}
+return $block;
+
+}
+
+
+function flickr_quiz_generate_quiz()
+{
+    $renderarray = array(
+        '#type' => 'markup',
+        '#markup' => '',
+        '#prefix' => '<div class="flickrquizwrapper">',
+        '#suffix' => '</div>'
+    );
+
+
+    libraries_load('phpFlickr');
+
+    $f = new phpFlickr('ba874a90d5fcedf9039e9f41f9a55cfd');
+
+    $result = $f->interestingness_getList('2018-11-02', 'geo');
+
+    $i = 0;
+    foreach ($result['photos']['photo'] as $picinfo) {
+        $i++;
+        if ($i > 200) {
+            return;
+        }
+        $info = $f->photos_getInfo($picinfo['id']);
+        if (isset($info['photo']['location'])) {
+            $imgurl = sprintf("https://farm%s.staticflickr.com/%s/%s_%s_z.jpg", $picinfo['farm'], $picinfo['server'], $picinfo['id'], $picinfo['secret']);
+            $renderarray['#markup'] .=  "<img src='{$imgurl}' style='display:block;' />";
+
+            $renderarray['#markup'] .= $info['photo']['location']['locality']['_content'];
+            $renderarray['#markup'] .= '<br/>';
+            $renderarray['#markup'] .= $info['photo']['location']['country']['_content'];
+
+        }
+
+    }
+    return $renderarray;
+}

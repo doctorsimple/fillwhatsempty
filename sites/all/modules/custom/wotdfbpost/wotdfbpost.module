@@ -33,7 +33,7 @@ function wotdfbpost_fboauth_action_post_to_wall($app_id, $access_token) {
 
     $message = "Word of the Day: \n" . $wotdwrapper->title->value() . " " . $wotdwrapper->field_part_of_speech->label()
         . "\n" . strip_tags($wotdwrapper->body->value->value());
-    $link = 'http://cryptoscience.com/word-of-the-day';
+    $link = 'http://fillwhatsempty.com/word-of-the-day';
 
 
     $query = array(
