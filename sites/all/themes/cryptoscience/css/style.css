@@ -7006,6 +7006,10 @@ nav ul.menu.navbar-nav li a.active-trail {
   body.node-type-tarot-page .navbar-default .navbar-collapse .menu.nav li a.active-trail:hover {
     box-shadow: 1px 2px 2px #999;
   }
+  body.node-type-page .navbar-default .navbar-btn img,
+  body.node-type-tarot-page .navbar-default .navbar-btn img {
+    box-shadow: 2px 2px 18px #999;
+  }
   body.node-type-page .floating-menu,
   body.node-type-tarot-page .floating-menu {
     line-height: 3;
@@ -7064,7 +7068,7 @@ nav ul.menu.navbar-nav li a.active-trail {
   #block-tile-generator-tile-generator {
     position: absolute;
     bottom: 5px;
-    right: 100px;
+    right: 200px;
     margin: -10px;
   }
   body.front {

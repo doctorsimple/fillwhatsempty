@@ -49,7 +49,11 @@ Drupal.behaviors.frontpage = {
             $billboards.off('mouseenter mouseleave').css('transform','none').find('a');
             $billboard.append('<div class="flipboard-panel"><div class="loading-icon">WAIT</div></div>').find('a').animate({'font-size': 0}, 1000);;
             jQuery.get('/randomflickrpic/'+$billboard.data('keyword'), function(data) {
-                $billboard.find('.flipboard-panel').removeClass('loading').find('.loading-icon').replaceWith(data);
+                $flipboard = $billboard.find('.flipboard-panel');
+                $flipboard.removeClass('loading').find('.loading-icon').replaceWith(data);
+                if (jQuery('.flipboard-panel').length == 3) {
+                    jQuery('.field-name-body').prepend("<h2>Recommendation: Do one of these <strong>&#8679;</strong> now.");
+                }
             });
         });
     }
